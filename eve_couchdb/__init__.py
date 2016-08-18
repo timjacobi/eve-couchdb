@@ -1,4 +1,5 @@
 from eve.io.base import DataLayer
+from flask import g
 from flask.ext import couchdb
 
 class CouchDBCollection():
@@ -26,10 +27,9 @@ class CouchDB(DataLayer):
         driver.add_viewdef(people_all_view)
 
         driver.setup(app)
-
     def find_one(self, resource, req, **lookup):
-        print(resource)
-        return True
+        result = g.couch.get(lookup["_id"])
+        return result
     
     def find(self, resource, req, sub_resource_lookup):
         results = self.views[resource+"_all"]()
